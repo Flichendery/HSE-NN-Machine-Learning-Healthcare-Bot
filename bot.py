@@ -1,9 +1,12 @@
 import os
 import telebot
 import time
+from dotenv import load_dotenv
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton, KeyboardButton, ReplyKeyboardMarkup, InputFile
 
-BOT_TOKEN = '8209795275:AAFYvoBjadqikAC8ThyNewW57K0laP7bkM8'
+load_dotenv()
+
+BOT_TOKEN = os.getenv("BOT_TOKEN")
 bot = telebot.TeleBot(BOT_TOKEN)
 
 def create_keyboard():
@@ -30,7 +33,7 @@ def show_authors(message):
     user_id = message.chat.id
     authors_info = (
         "🧑‍💻 Об авторах проекта\n\n"
-        "Бот сделан Артёмом Шеховцовым, Дмитрием Лепа и Владимиром Заворохиным\n"
+        "Бот сделан Артёмом Шеховцовым, Дмитрием Лепа и Владимиром Заворохиным\n\n"
         "Спасибо за использование!"
     )
 
