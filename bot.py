@@ -3,11 +3,16 @@ import telebot
 import time
 from dotenv import load_dotenv
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton, KeyboardButton, ReplyKeyboardMarkup, InputFile
-
+from logics import load_diseases_dict
+from model import MedicModel
 load_dotenv()
 
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 bot = telebot.TeleBot(BOT_TOKEN)
+
+diseases_codes = load_diseases_dict("./config/codes.json")
+
+model = MedicModel("./config")
 
 def create_keyboard():
     keyboard = ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=False)
@@ -46,8 +51,11 @@ def get_message(message):
     user_id = message.chat.id
     text = message.text
     
-    reversed_text = text[::-1] 
-    response = f"{reversed_text}"
+    if len(text) >= 256:
+        response = "Слишком длинный запрос! Бе-бе-бе, иди лечись"
+    else:
+        code = model.predict(text)
+        response = diseases_codes[code]
     
     bot.send_message(user_id, response, parse_mode="Markdown")
 
